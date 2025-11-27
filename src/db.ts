@@ -9,13 +9,28 @@ export async function initDB() {
 
   if (initPromise) {
     // Initialization in progress, wait for it
+    await initPromise;
+    return;
+  }
 
-      CREATE TABLE IF NOT EXISTS logs(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    email TEXT,
-    name TEXT,
-    sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
-  );
+  initPromise = (async () => {
+    db = await open({
+      filename: '/tmp/database.sqlite',
+      driver: sqlite3.Database
+    });
+
+    await db.exec(`
+      CREATE TABLE IF NOT EXISTS email_config (
+        key TEXT PRIMARY KEY,
+        value TEXT
+      );
+
+      CREATE TABLE IF NOT EXISTS logs (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        email TEXT,
+        name TEXT,
+        sent_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      );
     `);
 
     // Seed default config if not exists
