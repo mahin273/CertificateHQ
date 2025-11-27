@@ -2,13 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import { initDB } from './db';
 import routes from './routes';
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-import path from 'path';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
