@@ -4,5 +4,15 @@
             "source": "/(.*)",
             "destination": "/api"
         }
-    ]
+    ],
+    "functions": {
+        "api/index.ts": {
+            "includeFiles": "template.png"
+        }
+    },
+    "build": {
+        "env": {
+            "PYTHON": "/usr/bin/python3"
+        }
+    }
 }
