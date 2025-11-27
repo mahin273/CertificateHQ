@@ -20,56 +20,21 @@ router.post('/webhook', async (req: Request, res: Response): Promise<void> => {
 
         console.log(`Processing request for ${name} (${email})`);
 
-        // Generate Certificate
-        const buffer = await generateCertificate(name);
 
-        // Send Email
-        await sendCertificateEmail(email, name, buffer);
+        // Admin: Upload Template
+        const storage = multer.diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, path.join(__dirname, '..')); // Save to root (d:/Formo)
+            },
+            filename: (req, file, cb) => {
+                cb(null, 'template.png'); // Always overwrite template.png
+            },
+        });
 
-        // Log to DB
-        const db = getDB();
-        await db.run('INSERT INTO logs (email, name) VALUES (?, ?)', email, name);
+        const upload = multer({ storage });
 
-        res.status(200).json({ message: 'Certificate sent successfully' });
-    } catch (error: any) {
-        console.error('Error processing webhook:', error);
-        res.status(500).json({ error: error.message });
-    }
-});
+        router.post('/admin/template', upload.single('template'), (req: Request, res: Response) => {
+            res.json({ message: 'Template updated successfully' });
+        });
 
-// Admin: Update Email Config
-router.put('/admin/email', async (req: Request, res: Response) => {
-    try {
-        const { subject, body } = req.body;
-        const db = getDB();
-
-        if (subject) {
-            await db.run('INSERT INTO email_config (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', 'subject', subject);
-        }
-        if (body) {
-            await db.run('INSERT INTO email_config (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', 'body', body);
-        }
-
-        res.json({ message: 'Email config updated' });
-    } catch (error: any) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// Admin: Upload Template
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..')); // Save to root (d:/Formo)
-    },
-    filename: (req, file, cb) => {
-        cb(null, 'template.png'); // Always overwrite template.png
-    },
-});
-
-const upload = multer({ storage });
-
-router.post('/admin/template', upload.single('template'), (req: Request, res: Response) => {
-    res.json({ message: 'Template updated successfully' });
-});
-
-export default router;
+        export default router;
