@@ -24,9 +24,11 @@ async function startServer() {
     }
 }
 
+// Initialize DB immediately when module loads (for Vercel)
+initDB().catch(console.error);
+
 export default app;
 
 if (require.main === module) {
     startServer();
 }
-
