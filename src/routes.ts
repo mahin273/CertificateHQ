@@ -71,4 +71,63 @@ router.post('/admin/template', upload.single('template'), (req: Request, res: Re
     res.json({ message: 'Template updated successfully' });
 });
 
+// Admin: Get Certificate Style
+router.get('/admin/certificate/style', async (req: Request, res: Response) => {
+    try {
+        const db = await getDB();
+        const styleRow = await db.get('SELECT value FROM certificate_config WHERE key = ?', 'style');
+
+        if (styleRow?.value) {
+            res.json(JSON.parse(styleRow.value));
+        } else {
+            // Return default style if not found
+            res.json({
+                backgroundColor: '#f5f5f5',
+                borderColor: '#2c3e50',
+                innerBorderColor: '#3498db',
+                titleText: 'CERTIFICATE OF COMPLETION',
+                titleFontSize: 48,
+                titleColor: '#2c3e50',
+                subtitleText: 'This certificate is proudly presented to',
+                subtitleFontSize: 24,
+                subtitleColor: '#7f8c8d',
+                nameFontSize: 56,
+                nameColor: '#e74c3c',
+                footerText: 'For successfully completing the course',
+                footerFontSize: 20,
+                footerColor: '#2c3e50'
+            });
+        }
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Admin: Update Certificate Style
+router.put('/admin/certificate/style', async (req: Request, res: Response) => {
+    try {
+        const style = req.body;
+        const db = await getDB();
+
+        await db.run('INSERT INTO certificate_config (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', 'style', JSON.stringify(style));
+
+        res.json({ message: 'Certificate style updated' });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Admin: Preview Certificate
+router.get('/admin/certificate/preview', async (req: Request, res: Response) => {
+    try {
+        const name = (req.query.name as string) || 'John Doe';
+        const buffer = await generateCertificate(name);
+
+        res.setHeader('Content-Type', 'image/png');
+        res.send(buffer);
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default router;

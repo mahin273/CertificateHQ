@@ -1,12 +1,46 @@
-import { createCanvas, GlobalFonts } from '@napi-rs/canvas';
-import path from 'path';
-import fs from 'fs';
+import { createCanvas } from '@napi-rs/canvas';
+import { getDB } from '../db';
 
-const TEMPLATE_PATH = path.join(__dirname, '../../template.png');
+interface CertificateStyle {
+    backgroundColor: string;
+    borderColor: string;
+    innerBorderColor: string;
+    titleText: string;
+    titleFontSize: number;
+    titleColor: string;
+    subtitleText: string;
+    subtitleFontSize: number;
+    subtitleColor: string;
+    nameFontSize: number;
+    nameColor: string;
+    footerText: string;
+    footerFontSize: number;
+    footerColor: string;
+}
 
 export async function generateCertificate(name: string): Promise<Buffer> {
-    // Create a simple certificate without loading the template image
-    // This avoids issues with file loading on Vercel
+    // Get style from database
+    const db = await getDB();
+    const styleRow = await db.get('SELECT value FROM certificate_config WHERE key = ?', 'style');
+
+    const style: CertificateStyle = styleRow?.value
+        ? JSON.parse(styleRow.value)
+        : {
+            backgroundColor: '#f5f5f5',
+            borderColor: '#2c3e50',
+            innerBorderColor: '#3498db',
+            titleText: 'CERTIFICATE OF COMPLETION',
+            titleFontSize: 48,
+            titleColor: '#2c3e50',
+            subtitleText: 'This certificate is proudly presented to',
+            subtitleFontSize: 24,
+            subtitleColor: '#7f8c8d',
+            nameFontSize: 56,
+            nameColor: '#e74c3c',
+            footerText: 'For successfully completing the course',
+            footerFontSize: 20,
+            footerColor: '#2c3e50'
+        };
 
     const width = 800;
     const height = 600;
@@ -14,39 +48,39 @@ export async function generateCertificate(name: string): Promise<Buffer> {
     const ctx = canvas.getContext('2d');
 
     // Background
-    ctx.fillStyle = '#f5f5f5';
+    ctx.fillStyle = style.backgroundColor;
     ctx.fillRect(0, 0, width, height);
 
-    // Border
-    ctx.strokeStyle = '#2c3e50';
+    // Outer Border
+    ctx.strokeStyle = style.borderColor;
     ctx.lineWidth = 20;
     ctx.strokeRect(10, 10, width - 20, height - 20);
 
     // Inner border
-    ctx.strokeStyle = '#3498db';
+    ctx.strokeStyle = style.innerBorderColor;
     ctx.lineWidth = 3;
     ctx.strokeRect(30, 30, width - 60, height - 60);
 
     // Title
-    ctx.fillStyle = '#2c3e50';
-    ctx.font = 'bold 48px Arial';
+    ctx.fillStyle = style.titleColor;
+    ctx.font = `bold ${style.titleFontSize}px Arial`;
     ctx.textAlign = 'center';
-    ctx.fillText('CERTIFICATE OF COMPLETION', width / 2, 120);
+    ctx.fillText(style.titleText, width / 2, 120);
 
     // Subtitle
-    ctx.font = '24px Arial';
-    ctx.fillStyle = '#7f8c8d';
-    ctx.fillText('This certificate is proudly presented to', width / 2, 200);
+    ctx.font = `${style.subtitleFontSize}px Arial`;
+    ctx.fillStyle = style.subtitleColor;
+    ctx.fillText(style.subtitleText, width / 2, 200);
 
     // Name (the main personalization)
-    ctx.font = 'bold 56px Arial';
-    ctx.fillStyle = '#e74c3c';
+    ctx.font = `bold ${style.nameFontSize}px Arial`;
+    ctx.fillStyle = style.nameColor;
     ctx.fillText(name, width / 2, 300);
 
-    // Bottom text
-    ctx.font = '20px Arial';
-    ctx.fillStyle = '#2c3e50';
-    ctx.fillText('For successfully completing the course', width / 2, 400);
+    // Footer text
+    ctx.font = `${style.footerFontSize}px Arial`;
+    ctx.fillStyle = style.footerColor;
+    ctx.fillText(style.footerText, width / 2, 400);
 
     // Date
     ctx.font = '18px Arial';
