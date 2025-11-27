@@ -39,3 +39,5 @@ ctx.fillText('Date: ' + new Date().toLocaleDateString(), width / 2, 500);
 const buffer = canvas.toBuffer('image/png');
 fs.writeFileSync(path.join(__dirname, '../template.png'), buffer);
 console.log('Template created');
+
+//hello
