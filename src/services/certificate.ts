@@ -1,4 +1,4 @@
-import { createCanvas } from '@napi-rs/canvas';
+import { createCanvas, loadImage, Image } from '@napi-rs/canvas';
 import { getDB } from '../db';
 
 interface CertificateStyle {
@@ -22,6 +22,7 @@ export async function generateCertificate(name: string): Promise<Buffer> {
     // Get style from database
     const db = await getDB();
     const styleRow = await db.get('SELECT value FROM certificate_config WHERE key = ?', 'style');
+    const bgImageRow = await db.get('SELECT value FROM certificate_config WHERE key = ?', 'backgroundImage');
 
     const defaultStyle: CertificateStyle = {
         backgroundColor: '#f5f5f5',
@@ -51,18 +52,41 @@ export async function generateCertificate(name: string): Promise<Buffer> {
     const ctx = canvas.getContext('2d');
 
     // Background
-    ctx.fillStyle = style.backgroundColor;
-    ctx.fillRect(0, 0, width, height);
+    if (bgImageRow?.value) {
+        try {
+            const image = await loadImage(bgImageRow.value);
+            ctx.drawImage(image, 0, 0, width, height);
+        } catch (e) {
+            console.error('Failed to load background image, using default style', e);
+            // Fallback to default style
+            ctx.fillStyle = style.backgroundColor;
+            ctx.fillRect(0, 0, width, height);
 
-    // Outer Border
-    ctx.strokeStyle = style.borderColor;
-    ctx.lineWidth = 20;
-    ctx.strokeRect(10, 10, width - 20, height - 20);
+            // Outer Border
+            ctx.strokeStyle = style.borderColor;
+            ctx.lineWidth = 20;
+            ctx.strokeRect(10, 10, width - 20, height - 20);
 
-    // Inner border
-    ctx.strokeStyle = style.innerBorderColor;
-    ctx.lineWidth = 3;
-    ctx.strokeRect(30, 30, width - 60, height - 60);
+            // Inner border
+            ctx.strokeStyle = style.innerBorderColor;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(30, 30, width - 60, height - 60);
+        }
+    } else {
+        // Default programmatic background
+        ctx.fillStyle = style.backgroundColor;
+        ctx.fillRect(0, 0, width, height);
+
+        // Outer Border
+        ctx.strokeStyle = style.borderColor;
+        ctx.lineWidth = 20;
+        ctx.strokeRect(10, 10, width - 20, height - 20);
+
+        // Inner border
+        ctx.strokeStyle = style.innerBorderColor;
+        ctx.lineWidth = 3;
+        ctx.strokeRect(30, 30, width - 60, height - 60);
+    }
 
     // Title
     ctx.fillStyle = style.titleColor;

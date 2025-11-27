@@ -55,20 +55,38 @@ router.put('/admin/email', async (req: Request, res: Response) => {
     }
 });
 
-// Admin: Upload Template
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '..'));
-    },
-    filename: (req, file, cb) => {
-        cb(null, 'template.png');
-    },
-});
-
+// Admin: Upload Template (Custom Background)
+const storage = multer.memoryStorage(); // Use memory storage for Vercel/DB
 const upload = multer({ storage });
 
-router.post('/admin/template', upload.single('template'), (req: Request, res: Response) => {
-    res.json({ message: 'Template updated successfully' });
+router.post('/admin/template', upload.single('template'), async (req: Request, res: Response): Promise<void> => {
+    try {
+        if (!req.file) {
+            res.status(400).json({ error: 'No file uploaded' });
+            return;
+        }
+
+        // Convert buffer to Base64
+        const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+
+        const db = await getDB();
+        await db.run('INSERT INTO certificate_config (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value', 'backgroundImage', base64Image);
+
+        res.json({ message: 'Background updated successfully' });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Admin: Delete Template (Reset to Default)
+router.delete('/admin/template', async (req: Request, res: Response) => {
+    try {
+        const db = await getDB();
+        await db.run('DELETE FROM certificate_config WHERE key = ?', 'backgroundImage');
+        res.json({ message: 'Background reset to default' });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // Admin: Get Certificate Style

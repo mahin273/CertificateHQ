@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <header class="mb-8">
@@ -23,35 +27,62 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-lg font-semibold text-gray-900">Style Configuration</h2>
-                        <button onclick="saveStyle()" id="saveBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2">
+                        <button onclick="saveStyle()" id="saveBtn"
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2">
                             <span>Save Changes</span>
                         </button>
                     </div>
 
                     <form id="styleForm" class="space-y-4">
-                        <!-- Colors -->
+                        <!-- Background Image -->
                         <div class="space-y-3">
+                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Background Image</h3>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Custom Background
+                                    (PNG/JPG)</label>
+                                <div class="flex gap-2">
+                                    <input type="file" id="bgUpload" accept="image/png, image/jpeg"
+                                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                </div>
+                                <div class="flex gap-2 mt-2">
+                                    <button type="button" onclick="uploadBackground()" id="uploadBtn"
+                                        class="px-3 py-1.5 bg-gray-600 text-white rounded hover:bg-gray-700 text-xs font-medium">Upload</button>
+                                    <button type="button" onclick="resetBackground()" id="resetBtn"
+                                        class="px-3 py-1.5 bg-red-100 text-red-700 rounded hover:bg-red-200 text-xs font-medium">Reset
+                                        to Default</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Colors -->
+                        <div class="space-y-3 pt-4 border-t border-gray-100">
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Colors</h3>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Background</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="backgroundColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="backgroundColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="backgroundColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="backgroundColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Border</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="borderColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="borderColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="borderColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="borderColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Inner Border</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="innerBorderColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="innerBorderColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="innerBorderColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="innerBorderColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                             </div>
@@ -62,18 +93,22 @@
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Title Section</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Title Text</label>
-                                <input type="text" name="titleText" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                <input type="text" name="titleText"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Font Size (px)</label>
-                                    <input type="number" name="titleFontSize" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                    <input type="number" name="titleFontSize"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="titleColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="titleColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="titleColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="titleColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                             </div>
@@ -84,18 +119,22 @@
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Subtitle Section</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle Text</label>
-                                <input type="text" name="subtitleText" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                <input type="text" name="subtitleText"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Font Size (px)</label>
-                                    <input type="number" name="subtitleFontSize" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                    <input type="number" name="subtitleFontSize"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="subtitleColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="subtitleColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="subtitleColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="subtitleColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                             </div>
@@ -107,13 +146,16 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Font Size (px)</label>
-                                    <input type="number" name="nameFontSize" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                    <input type="number" name="nameFontSize"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="nameColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="nameColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="nameColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="nameColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                             </div>
@@ -124,18 +166,22 @@
                             <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Footer Section</h3>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Footer Text</label>
-                                <input type="text" name="footerText" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                <input type="text" name="footerText"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Font Size (px)</label>
-                                    <input type="number" name="footerFontSize" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                    <input type="number" name="footerFontSize"
+                                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
                                     <div class="flex gap-2">
-                                        <input type="color" name="footerColor" class="h-9 w-9 rounded cursor-pointer border border-gray-300">
-                                        <input type="text" name="footerColor" class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        <input type="color" name="footerColor"
+                                            class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="footerColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
                                     </div>
                                 </div>
                             </div>
@@ -151,17 +197,21 @@
                         <h2 class="text-lg font-semibold text-gray-900">Live Preview</h2>
                         <div class="flex items-center gap-2">
                             <label class="text-sm text-gray-600">Preview Name:</label>
-                            <input type="text" id="previewName" value="John Doe" class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-2 py-1 w-40" oninput="updatePreview()">
+                            <input type="text" id="previewName" value="John Doe"
+                                class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-2 py-1 w-40"
+                                oninput="updatePreview()">
                         </div>
                     </div>
-                    
-                    <div class="relative aspect-[4/3] w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
+
+                    <div
+                        class="relative aspect-[4/3] w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
                         <img id="previewImage" src="" alt="Certificate Preview" class="max-w-full max-h-full shadow-lg">
-                        <div id="loadingSpinner" class="absolute inset-0 bg-white/80 flex items-center justify-center hidden">
+                        <div id="loadingSpinner"
+                            class="absolute inset-0 bg-white/80 flex items-center justify-center hidden">
                             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                         </div>
                     </div>
-                    
+
                     <p class="mt-4 text-sm text-gray-500 text-center">
                         This is a real-time preview of how the certificate will look.
                     </p>
@@ -176,7 +226,7 @@
             try {
                 const response = await fetch('/admin/certificate/style');
                 const style = await response.json();
-                
+
                 // Populate form
                 const form = document.getElementById('styleForm');
                 Object.keys(style).forEach(key => {
@@ -196,7 +246,7 @@
         // Sync color inputs (text <-> color picker)
         document.querySelectorAll('input[type="color"]').forEach(picker => {
             const textInput = picker.nextElementSibling;
-            
+
             picker.addEventListener('input', (e) => {
                 textInput.value = e.target.value;
                 updatePreviewDebounced();
@@ -232,7 +282,7 @@
             const formData = new FormData(form);
             const style = Object.fromEntries(formData.entries());
             const previewName = document.getElementById('previewName').value;
-            
+
             const spinner = document.getElementById('loadingSpinner');
             spinner.classList.remove('hidden');
 
@@ -242,7 +292,7 @@
                 // OR better: we should update the preview endpoint to accept style params.
                 // For now, let's just save it to see the preview (a bit hacky but works for MVP)
                 // Actually, let's just update the style first
-                
+
                 await fetch('/admin/certificate/style', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
@@ -286,7 +336,202 @@
                     btn.innerHTML = '<span>Saved!</span>';
                     btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
                     btn.classList.add('bg-green-600', 'hover:bg-green-700');
-                    
+
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                        btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error('Failed to save');
+                }
+            } catch (error) {
+                alert('Failed to save changes');
+                class="h-9 w-9 rounded cursor-pointer border border-gray-300" >
+                    <input type="text" name="nameColor"
+                        class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                    </div>
+                                </div >
+                            </div >
+                        </div >
+
+                    <!-- Footer Section -->
+                    <div class="space-y-3 pt-4 border-t border-gray-100">
+                        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Footer Section</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Footer Text</label>
+                            <input type="text" name="footerText"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Font Size (px)</label>
+                                <input type="number" name="footerFontSize"
+                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                                <div class="flex gap-2">
+                                    <input type="color" name="footerColor"
+                                        class="h-9 w-9 rounded cursor-pointer border border-gray-300">
+                                        <input type="text" name="footerColor"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-3 py-2">
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div >
+            </div >
+
+            < !--Preview Panel-- >
+                    <div class="lg:col-span-8">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sticky top-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-lg font-semibold text-gray-900">Live Preview</h2>
+                                <div class="flex items-center gap-2">
+                                    <label class="text-sm text-gray-600">Preview Name:</label>
+                                    <input type="text" id="previewName" value="John Doe"
+                                        class="rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm border px-2 py-1 w-40"
+                                        oninput="updatePreview()">
+                                </div>
+                            </div>
+
+                            <div
+                                class="relative aspect-[4/3] w-full bg-gray-100 rounded-lg overflow-hidden border border-gray-200 flex items-center justify-center">
+                                <img id="previewImage" src="" alt="Certificate Preview" class="max-w-full max-h-full shadow-lg">
+                                    <div id="loadingSpinner"
+                                        class="absolute inset-0 bg-white/80 flex items-center justify-center hidden">
+                                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                                    </div>
+                            </div>
+
+                            <p class="mt-4 text-sm text-gray-500 text-center">
+                                This is a real-time preview of how the certificate will look.
+                            </p>
+                        </div>
+                    </div>
+        </div >
+    </div >
+
+                    <script>
+        // Load initial data
+                        async function loadStyle() {
+            try {
+                const response = await fetch('/admin/certificate/style');
+                        const style = await response.json();
+
+                        // Populate form
+                        const form = document.getElementById('styleForm');
+                Object.keys(style).forEach(key => {
+                    const inputs = form.querySelectorAll(`[name="${key}"]`);
+                    inputs.forEach(input => {
+                            input.value = style[key];
+                    });
+                });
+
+                        updatePreview();
+            } catch (error) {
+                            console.error('Failed to load style:', error);
+                        alert('Failed to load configuration');
+            }
+        }
+
+        // Sync color inputs (text <-> color picker)
+        document.querySelectorAll('input[type="color"]').forEach(picker => {
+            const textInput = picker.nextElementSibling;
+
+            picker.addEventListener('input', (e) => {
+                            textInput.value = e.target.value;
+                        updatePreviewDebounced();
+            });
+
+            textInput.addEventListener('input', (e) => {
+                            picker.value = e.target.value;
+                        updatePreviewDebounced();
+            });
+        });
+
+        // Handle other inputs
+        document.querySelectorAll('input:not([type="color"])').forEach(input => {
+                            input.addEventListener('input', updatePreviewDebounced);
+        });
+
+                        // Debounce function
+                        function debounce(func, wait) {
+                            let timeout;
+                        return function executedFunction(...args) {
+                const later = () => {
+                            clearTimeout(timeout);
+                        func(...args);
+                };
+                        clearTimeout(timeout);
+                        timeout = setTimeout(later, wait);
+            };
+        }
+
+                        // Update preview
+                        async function updatePreview() {
+            const form = document.getElementById('styleForm');
+                        const formData = new FormData(form);
+                        const style = Object.fromEntries(formData.entries());
+                        const previewName = document.getElementById('previewName').value;
+
+                        const spinner = document.getElementById('loadingSpinner');
+                        spinner.classList.remove('hidden');
+
+                        try {
+                            // First save the temp style (or send it in body if we had a POST preview endpoint)
+                            // Since our preview endpoint uses the saved style, we need to temporarily save it
+                            // OR better: we should update the preview endpoint to accept style params.
+                            // For now, let's just save it to see the preview (a bit hacky but works for MVP)
+                            // Actually, let's just update the style first
+
+                            await fetch('/admin/certificate/style', {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(style)
+                            });
+
+                        // Then fetch preview
+                        const response = await fetch(`/admin/certificate/preview?name=${encodeURIComponent(previewName)}&t=${Date.now()}`);
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                document.getElementById('previewImage').src = url;
+            } catch (error) {
+                console.error('Preview failed:', error);
+            } finally {
+                spinner.classList.add('hidden');
+            }
+        }
+
+        const updatePreviewDebounced = debounce(updatePreview, 500);
+
+        // Save changes
+        async function saveStyle() {
+            const btn = document.getElementById('saveBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>Saving...</span>';
+            btn.disabled = true;
+
+            try {
+                const form = document.getElementById('styleForm');
+                const formData = new FormData(form);
+                const style = Object.fromEntries(formData.entries());
+
+                const response = await fetch('/admin/certificate/style', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(style)
+                });
+
+                if (response.ok) {
+                    // Show success state briefly
+                    btn.innerHTML = '<span>Saved!</span>';
+                    btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    btn.classList.add('bg-green-600', 'hover:bg-green-700');
+
                     setTimeout(() => {
                         btn.innerHTML = originalText;
                         btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
@@ -303,8 +548,77 @@
             }
         }
 
+        // Upload Background
+        async function uploadBackground() {
+            const fileInput = document.getElementById('bgUpload');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+
+            const btn = document.getElementById('uploadBtn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Uploading...';
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('template', file);
+
+            try {
+                const response = await fetch('/admin/template', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Background uploaded successfully!');
+                    updatePreview();
+                } else {
+                    throw new Error('Upload failed');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                alert('Failed to upload background');
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+                fileInput.value = '';
+            }
+        }
+
+        // Reset Background
+        async function resetBackground() {
+            if (!confirm('Are you sure you want to reset to the default background?')) return;
+
+            const btn = document.getElementById('resetBtn');
+            const originalText = btn.innerText;
+            btn.innerText = 'Resetting...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/admin/template', {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Background reset to default!');
+                    updatePreview();
+                } else {
+                    throw new Error('Reset failed');
+                }
+            } catch (error) {
+                console.error('Reset error:', error);
+                alert('Failed to reset background');
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
         // Initialize
         loadStyle();
     </script>
 </body>
+
 </html>
